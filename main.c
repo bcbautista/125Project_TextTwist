@@ -136,15 +136,23 @@ int main(){
 		if(menuChoice==1){	//start playing the game
 			int points=0;
 			int exitRound=0;	//will be 1 if player exits round
-			char shuffled[10][7]={"sbsra", "weltat", "dsaydr"};
+			char shuffled[10][7]={"sbsra", "htroo", "smade", "celefed", "weltat", "dsaydr", "ctakde"};
 			char words[10][30][7]={
 				{"bar", "bra", "ass", "abs", "bass", "bars", "bras", "brass"},
+				{"tor", "rot", "hot", "too", "rho", "tho", "root", "hoot", "roto", "toro", "thro", "ortho"},
+				{"mad", "sea", "sad", "med", "dam", "ads", "made", "seam", "same", "dams", "dame", "mads", "mead", "dames"},
+				{"cel", "eel", "elf", "led", "lee", "fed", "fee", "cede", "clef", "feed", "feel", "fled", "fleece", "fleeced"},
 				{"eat", "let", "lea", "law", "tea", "tat", "ale", "ate", "awe", "awl", "wet", "late", "teal", "teat", "tale", "welt", "weal", "watt", "wattle"},
-				{"say", "sad", "ads", "add", "yar", "ray", "dad", "day", "dry", "adds", "yard", "rays", "dads", "days", "dray", "yards", "drays", "dryad", "dryads"}};
+				{"say", "sad", "ads", "add", "yar", "ray", "dad", "day", "dry", "adds", "yard", "rays", "dads", "days", "dray", "yards", "drays", "dryad", "dryads"},
+				{"eat", "cad", "cat", "ade", "ace", "act", "ate", "ted", "tea", "tad", "deck", "date", "cake", "aced", "teak", "take", "tack", "cadet", "caked", "acted", "tacked"}};
 			char blanks[10][30][15]={
 				{"_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _ _"},
+				{"_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _ _"},
+				{"_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _","_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _ _"},
+				{"_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _ _", "_ _ _ _ _ _"},
 				{"_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _ _ _"},
-				{"_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _ _ _", "_ _ _ _ _ _", "_ _ _ _ _ _", "_ _ _ _ _ _ _"}};
+				{"_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _ _ _", "_ _ _ _ _ _", "_ _ _ _ _ _", "_ _ _ _ _ _ _"},
+				{"_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _ _", "_ _ _ _ _", "_ _ _ _ _", "_ _ _ _ _ _"}};
 
 			for(i=0; i<2; i++){
 				exitRound=playGame(words[i], blanks[i], shuffled[i], &points);
