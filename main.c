@@ -60,6 +60,7 @@ int playGame(char words[30][7], char blanks[30][15], char shuffled[7], int *poin
 	char gameInput[10];
 	int toGuess=0;
 	int guessed=0;
+	int guessedLongest=0;
 	
 	for(int i=0; i<30; i++){
 		if(strcmp(words[i], "")==0){
@@ -73,9 +74,16 @@ int playGame(char words[30][7], char blanks[30][15], char shuffled[7], int *poin
 		printf("Shuffled word: %s\n", shuffled);
 		printBlank(blanks);
 		printf("Points: %d\n", *points);
-		printf("Enter your guess below:\n(Type 'EXIT' to quit game, and 'SHUFFLE' to shuffle the words)\n>");
+		if(guessedLongest == 0){
+			printf("Enter your guess below:\n(Type 'EXIT' to quit game, and 'SHUFFLE' to shuffle the words)\n>");
+		} else {
+			printf("Enter your guess below:\n(Type 'EXIT' to quit game, 'SHUFFLE' to shuffle the words, \n");
+			printf("'YES' to proceed to next round)\n>");
+		}
 		scanf("%s", gameInput);
-		if(strcmp(gameInput, "SHUFFLE") == 0){
+		if(strcmp(gameInput, "YES") == 0 && guessedLongest){
+			break;
+		}else if(strcmp(gameInput, "SHUFFLE") == 0){
 			//shuffle(shuffled);
 		}else if(strcmp(gameInput, "EXIT") == 0){
 			return 1;
@@ -87,6 +95,7 @@ int playGame(char words[30][7], char blanks[30][15], char shuffled[7], int *poin
 				if(strcmp(gameInput, "YES") == 0){
 					break;
 				}
+				guessedLongest = 1;
 			}
 		}
 		printf("\n");
