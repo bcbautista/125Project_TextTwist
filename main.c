@@ -1,36 +1,35 @@
-/*To-do:
-	1. Implement 10 rounds
-	2. Shuffle
-	3. Timer
-	4. Close words
-	5. UI
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 
 void mainMenu(){
+	printf("-----------------------------------------------------------------------------\n");
 	printf("TEXT TWIST\n");
 	printf("[1] Start Game\n");
 	printf("[2] Exit\n");
+	printf("Your choice: ");
 }
 
-void printBlank(char round1Blank[8][10]){
-	for(int i=0; i<8; i++){
-		printf("%s\n", round1Blank[i]);
+void printBlank(char blanks[8][15]){
+	printf("-----------------------------------------------------------------------------\n");
+	for(int i=0; i<30; i++){
+		if(strcmp(blanks[i], "")==0){
+			break;
+		}
+		printf("%s\n", blanks[i]);
 	}
+	printf("-----------------------------------------------------------------------------\n");
 }
 
-int checkInput(char round1Words[8][6], char round1Blank[8][10], char gameInput[7], int points){
+int checkInput(char round1Words[30][7], char round1Blank[30][15], char gameInput[7], int *points){
 	for(int i=0; i<8; i++){
 		gameInput[i]=tolower(gameInput[i]);
 	}
-	for(int i=0; i<8; i++){
+	for(int i=0; i<30; i++){
 		if(strcmp(gameInput, round1Words[i])==0){	//meaning they match
 			int check=0;
-			for(int j=0; j<8; j++){
+			for(int j=0; j<30; j++){
 				if(strcmp(gameInput, round1Blank[j])==0){	//check if already inputted
 					check++;
 					break;
@@ -40,73 +39,95 @@ int checkInput(char round1Words[8][6], char round1Blank[8][10], char gameInput[7
 				strcpy(round1Blank[i], round1Words[i]);
 				//updating points
 				if(strlen(round1Words[i])==3){
-					points=points+5;
+					*points+=5;
 				}else if(strlen(round1Words[i])==4){
-					points=points+10;
+					*points+=10;
 				}else if(strlen(round1Words[i])==5){
-					points=points+20;
+					*points+=20;
 				}else{
-					points=points+30;
+					*points+=30;
 				}
+				return 1;
 			}else{
 				printf("Word already found!\n");
 			}
 		}
 	}
-	return points;
+	return 0;
 }
 
-//NOT YET WORKING
-void shuffle(char *shuffled){
-// 	int checker[strlen(shuffled)-1];
-// 	for(int i=0; i<strlen(shuffled)-1; i++){
-// 		checker[i]=0;
-// 	}
-// 	int random, done;
-// 	char temp[strlen(shuffled)];
-// 	strcpy(temp,shuffled);
-// 	for(int i=0; i<strlen(shuffled); i++){
-// 		do{
-// 			done=0;
-// 			random=rand()%(strlen(shuffled)-1);
-// 			if(checker[random]==0){
-// 				printf("%d\n", random);
-// 				checker[random]=1;
-// 				temp[random]=shuffled[i];
-// 				done=1;
-// 				printf("%s\n", temp);
-// 			}
-// 		}while(done==0);
-// 	}
-// 	strcpy(shuffled, temp);
+int playGame(char words[30][7], char blanks[30][15], char shuffled[7], int *points){
+	char gameInput[10];
+	int toGuess=0;
+	int guessed=0;
+	
+	for(int i=0; i<30; i++){
+		if(strcmp(words[i], "")==0){
+			break;
+		}
+		toGuess++;
+	}
+
+	do{
+		printf("-----------------------------------------------------------------------------\n");
+		printf("Shuffled word: %s\n", shuffled);
+		printBlank(blanks);
+		printf("Points: %d\n", *points);
+		printf("Enter your guess below:\n(Type 'EXIT' to quit game, and 'SHUFFLE' to shuffle the words)\n>");
+		scanf("%s", gameInput);
+		if(strcmp(gameInput, "SHUFFLE") == 0){
+			//shuffle(shuffled);
+		}else if(strcmp(gameInput, "EXIT") == 0){
+			return 1;
+		}else{
+			guessed+=checkInput(words, blanks, gameInput, points);
+			if(strcmp(gameInput, words[toGuess-1]) == 0){
+				printf("Congratulations! You found the longest word.\nWould you like to proceed to the next round? YES or NO\n");
+				scanf("%s", gameInput);
+				if(strcmp(gameInput, "YES") == 0){
+					break;
+				}
+			}
+		}
+		printf("\n");
+	}while(toGuess!=guessed);
+	return 0;
+
 }
 
 int main(){
-	int choice; 
-	mainMenu();
-	scanf("%d", &choice);
-	if(choice==1){	//Start Game
-		int points=0;
-		char gameInput[10];
-		char shuffled[6]="sbrsa";
-		char round1Words[8][6]={"bar", "bra", "ass", "abs", "bass", "bars", "bras", "brass"};
-		char round1Blank[8][10]={"_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _ _"};
+	int menuChoice;
 
-		do{
-			printf("ROUND 1:\n");
-			printBlank(round1Blank);
-			printf("Points: %d\n", points);
-			printf("Shuffled word: %s\n", shuffled);
-			printf("Enter your guess below (Type 'EXIT' to quit game, and 'SHUFFLE' to shuffle the words):\n>");
-			scanf("%s", gameInput);
-			if(strcmp(gameInput, "SHUFFLE") == 0){
-				shuffle(shuffled);
+	do{
+		int i;
+		mainMenu();
+		scanf("%d", &menuChoice);
+		if(menuChoice==1){	//start playing the game
+			int points=0;
+			int exitRound=0;	//will be 1 if player exits round
+			char shuffled[10][7]={"sbsra", "weltat"};
+			char words[10][30][7]={
+				{"bar", "bra", "ass", "abs", "bass", "bars", "bras", "brass"},
+				{"eat", "let", "lea", "law", "tea", "tat", "ale", "ate", "awe", "awl", "wet", "late", "teal", "teat", "tale", "welt", "weal", "watt", "wattle"}};
+			char blanks[10][30][15]={
+				{"_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _ _"},
+				{"_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _", "_ _ _ _ _ _"}};
+
+			for(i=0; i<2; i++){
+				exitRound=playGame(words[i], blanks[i], shuffled[i], &points);
+				if(exitRound==1){
+					break;
+				}
 			}
-			points=checkInput(round1Words, round1Blank, gameInput, points);
-			printf("\n");
-		}while(strcmp(gameInput, "EXIT") != 0);
 
-	}else{	//Exit
-		printf("Thank you for playing!\n");
-	}
+			if(i==2){
+				printf("Congratulations! You finished all the rounds.\n");
+			}
+
+		}else if(menuChoice!=2){
+			printf("Invalid choice.\n");
+		}else{	//exit game
+			printf("Thank you for playing.\n");
+		}
+	}while(menuChoice!=2);
 }
