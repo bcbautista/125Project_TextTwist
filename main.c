@@ -22,6 +22,28 @@ void printBlank(char blanks[8][15]){
 	printf("-----------------------------------------------------------------------------\n");
 }
 
+void shuffle(char shuffled[7]){
+	int checker[strlen(shuffled)];
+	char temp[7];
+	int random;
+
+	for(int i=0; i<strlen(shuffled); i++){
+		checker[i]=0;
+	}
+
+	for(int i=0; i<strlen(shuffled); i++){
+		do{
+			random=rand()%strlen(shuffled);
+			if(checker[random]==0){
+				temp[random]=shuffled[i];
+				checker[random]=1;
+				break;
+			}
+		}while(1);
+	}
+	strcpy(shuffled, temp);
+}
+
 int checkInput(char round1Words[30][7], char round1Blank[30][15], char gameInput[7], int *points){
 	for(int i=0; i<8; i++){
 		gameInput[i]=tolower(gameInput[i]);
@@ -84,7 +106,7 @@ int playGame(char words[30][7], char blanks[30][15], char shuffled[7], int *poin
 		if(strcmp(gameInput, "YES") == 0 && guessedLongest){
 			break;
 		}else if(strcmp(gameInput, "SHUFFLE") == 0){
-			//shuffle(shuffled);
+			shuffle(shuffled);
 		}else if(strcmp(gameInput, "EXIT") == 0){
 			return 1;
 		}else{
