@@ -97,9 +97,9 @@ int playGame(char words[30][7], char blanks[30][15], char shuffled[7], int *poin
 		printBlank(blanks);
 		printf("Points: %d\n", *points);
 		if(guessedLongest == 0){
-			printf("Enter your guess below:\n(Type 'EXIT' to quit game, and 'SHUFFLE' to shuffle the words)\n>");
+			printf("Enter your guess below:\n(Type 'EXIT' to go back to main menu, and 'SHUFFLE' to shuffle the words)\n>");
 		} else {
-			printf("Enter your guess below:\n(Type 'EXIT' to quit game, 'SHUFFLE' to shuffle the words, \n");
+			printf("Enter your guess below:\n(Type 'EXIT' to go back to main menu, 'SHUFFLE' to shuffle the words, \n");
 			printf("'YES' to proceed to next round)\n>");
 		}
 		scanf("%s", gameInput);
