@@ -17,7 +17,7 @@ void printBlank(char blanks[8][15]){
 		if(strcmp(blanks[i], "")==0){
 			break;
 		}
-		printf("%s\n", blanks[i]);
+		printf("%c\n", blanks[i][0]);
 	}
 	printf("-----------------------------------------------------------------------------\n");
 }
