@@ -1,22 +1,26 @@
 #include "../../sdk/dexsdk.h"
 
+#define FULL_ROW 320
+#define FULL_COL 200
+
 void erase(int x, int y, int w, int h){	//clears screen (reference from lights.c)
    int i,j;
    for (i=y;i<=(y+h);i++)
       for (j=x;j<=(x+w);j++)
-         write_pixel(j,i,100);
+         write_pixel(j,i,BLACK);
 }
 
 void mainMenu(){
-	write_text("TEXT TWIST!",270,150,WHITE,5); //title
+	write_text("TEXT TWIST!",110,50,WHITE,5); //title
+	write_text("FOR ICS-OS",110,70,RED,0);
 
 	//menu options
-	write_text("1 - Start",270,300,WHITE,3);
-	write_text("2 - Quit",270,340,WHITE,3);
+	write_text("1 - Start",120,120,GREEN,3);
+	write_text("2 - Quit",120,140,GREEN,3);
 }
 
 void printBlank(char blanks[8][15], int x, int y){
-	erase(100,0,100,480);
+	erase(100,0,0,FULL_COL);
 	int tempX=x;
 	int tempY=y;
 
@@ -63,8 +67,8 @@ int len=0;
 	}
 	temp[len]='\0';
 	strcpy(shuffled, temp);
-	erase(200,30,300,50);
-	write_text(shuffled,200,30,WHITE,3);
+	erase(200,30,120,50);
+	write_text(shuffled,200,50,WHITE,3);
 }
 
 int checkInput(char round1Words[30][7], char round1Blank[30][15], char gameInput[7], int *points){
@@ -111,19 +115,20 @@ int playGame(char words[30][7], char blanks[30][15], char shuffled[7], int *poin
 		}
 		toGuess++;
 	}
-	erase(0,0,640,480);
+	erase(0,0,FULL_ROW,FULL_COL);
 	do{
-		write_text(shuffled,380,120,WHITE,3);
-		write_text("Entered: ",330,150,WHITE,3);
-		printBlank(blanks,130,80);
-		write_text("Points: ",380,180,WHITE,3);
-		write_text((char)*points,450,180,WHITE,3);
-		if(guessedLongest == 0){
-			write_text("0 - Enter word",330,300,WHITE,3);
-			write_text("1 - Shuffle",340,340,WHITE,3);
-			write_text("2 - Exit",350,380,WHITE,3);
-		} else {
-			write_text("3 - Next Round",300,400,WHITE,0);
+		write_text(shuffled,200,50,WHITE,3);
+		write_text("Entered: ",120,70,WHITE,3);
+		printBlank(blanks,20,40);
+		write_text("Points: ",180,160,WHITE,3);
+
+		char pointArray[] = itoa(*points);
+		write_text(pointArray,250,160,WHITE,3);
+		write_text("0 - Enter word",140,85,WHITE,3);
+		write_text("1 - Shuffle",140,100,WHITE,3);
+		write_text("2 - Exit",140,115,WHITE,3);
+		if(guessedLongest == 1){
+			write_text("3 - Next Round",140,130,WHITE,3);
 		}
 
 		keypress=(char)getch();
@@ -134,6 +139,7 @@ int playGame(char words[30][7], char blanks[30][15], char shuffled[7], int *poin
 		}else if(keypress=='3' && guessedLongest){	//proceed to next round
 			break;
 		}else{
+			//write_text("3 - Next Round",140,130,WHITE,3);
 			int i=0;
 			gameInput[i]=keypress;
 			do{
@@ -142,14 +148,15 @@ int playGame(char words[30][7], char blanks[30][15], char shuffled[7], int *poin
 			}while(gameInput[i]!='0');
 			gameInput[i]='\0';
 			guessed+=checkInput(words, blanks, gameInput, points);
-			// if(strcmp(gameInput, words[toGuess-1]) == 0){
-			// 	write_text("You found the longest word. Would you like to proceed to the next round? 5-YES 6-NO",5,210,WHITE,0);
-			// 	keypress=(char)getch();
-			// 	if(keypress=='5'){
-			// 		break;
-			// 	}
-			// 	guessedLongest = 1;
-			// }
+			if(strcmp(gameInput, words[toGuess-1]) == 0){
+				//write_text("You found the longest word. Would you like to proceed to the next round? 5-YES 6-NO",5,210,WHITE,0);
+				// keypress=(char)getch();
+				// if(keypress=='5'){
+				// 	break;
+				// }
+				guessedLongest = 1;
+			}
+			erase(0,0,320,200);
 		}
 	}while(toGuess!=guessed);
 	return 0;
@@ -157,10 +164,10 @@ int playGame(char words[30][7], char blanks[30][15], char shuffled[7], int *poin
 }
 
 int main(){
-	set_graphics(VGA_640X480X16);
+	set_graphics(VGA_320X200X256);
 	char menuChoice;
 	do{
-		erase(0,0,640,480);
+		erase(0,0,FULL_ROW,FULL_COL);
 		int i;
 		mainMenu();
 		menuChoice=(char)getch();
@@ -200,7 +207,7 @@ int main(){
 			}
 
 			if(i==10){
-				erase(0,0,640,480);
+				erase(0,0,FULL_ROW,FULL_COL);
 			}
 
 		}else if(menuChoice!='2'){
