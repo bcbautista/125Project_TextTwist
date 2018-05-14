@@ -1,22 +1,26 @@
 #include "../../sdk/dexsdk.h"
 
+#define FULL_ROW 320
+#define FULL_COL 200
+
 void erase(int x, int y, int w, int h){	//clears screen (reference from lights.c)
    int i,j;
    for (i=y;i<=(y+h);i++)
       for (j=x;j<=(x+w);j++)
-         write_pixel(j,i,100);
+         write_pixel(j,i,BLACK);
 }
 
 void mainMenu(){
-	write_text("TEXT TWIST!",270,150,WHITE,5); //title
+	write_text("TEXT TWIST!",110,50,WHITE,5); //title
+	write_text("FOR ICS-OS",110,70,RED,0);
 
 	//menu options
-	write_text("1 - Start",270,300,WHITE,3);
-	write_text("2 - Quit",270,340,WHITE,3);
+	write_text("1 - Start",120,120,GREEN,3);
+	write_text("2 - Quit",120,140,GREEN,3);
 }
 
 void printBlank(char blanks[8][15], int x, int y){
-	erase(100,0,100,480);
+	erase(100,0,0,FULL_COL);
 	int tempX=x;
 	int tempY=y;
 
@@ -28,9 +32,17 @@ void printBlank(char blanks[8][15], int x, int y){
 		// 	fill_rect(tempX, tempY, 10, 10, WHITE);
 		// 	tempX+=13;
 		// }
+		//if(i )
+
 		write_text(blanks[i],tempX,tempY,WHITE,0);
-		tempY+=13;
-		tempX=x;
+		if(i == 11 || i == 23){
+			tempY = y;
+			tempX += 50;
+		}
+		else{
+			tempY+=13;
+			//tempX=tempX;
+		}
 	}
 }
 
@@ -63,8 +75,8 @@ int len=0;
 	}
 	temp[len]='\0';
 	strcpy(shuffled, temp);
-	erase(200,30,300,50);
-	write_text(shuffled,200,30,WHITE,3);
+	erase(200,30,120,50);
+	write_text(shuffled,200,50,WHITE,3);
 }
 
 int checkInput(char round1Words[30][7], char round1Blank[30][15], char gameInput[7], int *points){
@@ -111,19 +123,21 @@ int playGame(char words[30][7], char blanks[30][15], char shuffled[7], int *poin
 		}
 		toGuess++;
 	}
-	erase(0,0,640,480);
+	erase(0,0,FULL_ROW,FULL_COL);
 	do{
-		write_text(shuffled,380,120,WHITE,3);
-		write_text("Entered: ",330,150,WHITE,3);
-		printBlank(blanks,130,80);
-		write_text("Points: ",380,180,WHITE,3);
-		write_text((char)*points,450,180,WHITE,3);
-		if(guessedLongest == 0){
-			write_text("0 - Enter word",330,300,WHITE,3);
-			write_text("1 - Shuffle",340,340,WHITE,3);
-			write_text("2 - Exit",350,380,WHITE,3);
-		} else {
-			write_text("3 - Next Round",300,400,WHITE,0);
+		write_text(shuffled,220,50,WHITE,0);
+		write_text("Entered: ",150,70,WHITE,0);
+		printBlank(blanks,10,30);
+		write_text("Points: ",180,160,WHITE,0);
+
+		//char pointArray[] = itoa(*points);
+		//write_text(pointArray,250,160,WHITE,1);
+		//write_text((*points),250,160,WHITE,0);
+		write_text("0 - Submit word",150,95,WHITE,0);
+		write_text("1 - Shuffle",150,110,WHITE,0);
+		write_text("2 - Exit",150,125,WHITE,0);
+		if(guessedLongest == 1){
+			write_text("3 - Next Round",150,140,GREEN,0);
 		}
 
 		keypress=(char)getch();
@@ -142,14 +156,15 @@ int playGame(char words[30][7], char blanks[30][15], char shuffled[7], int *poin
 			}while(gameInput[i]!='0');
 			gameInput[i]='\0';
 			guessed+=checkInput(words, blanks, gameInput, points);
-			// if(strcmp(gameInput, words[toGuess-1]) == 0){
-			// 	write_text("You found the longest word. Would you like to proceed to the next round? 5-YES 6-NO",5,210,WHITE,0);
-			// 	keypress=(char)getch();
-			// 	if(keypress=='5'){
-			// 		break;
-			// 	}
-			// 	guessedLongest = 1;
-			// }
+			if(strcmp(gameInput, words[toGuess-1]) == 0){
+				//write_text("You found the longest word. Would you like to proceed to the next round? 5-YES 6-NO",5,210,WHITE,0);
+				// keypress=(char)getch();
+				// if(keypress=='5'){
+				// 	break;
+				// }
+				guessedLongest = 1;
+			}
+			erase(0,0,320,200);
 		}
 	}while(toGuess!=guessed);
 	return 0;
@@ -157,17 +172,17 @@ int playGame(char words[30][7], char blanks[30][15], char shuffled[7], int *poin
 }
 
 int main(){
-	set_graphics(VGA_640X480X16);
+	set_graphics(VGA_320X200X256);
 	char menuChoice;
 	do{
-		erase(0,0,640,480);
+		erase(0,0,FULL_ROW,FULL_COL);
 		int i;
 		mainMenu();
 		menuChoice=(char)getch();
 		if(menuChoice=='1'){	//start playing the game
 			int points=0;
 			int exitRound=0;	//will be 1 if player exits round
-			char shuffled[10][7]={"sbsra", "linvy", "htroo", "smade", "pleope", "celefed", "weltat", "dsaydr", "ctakde", "wdalde"};
+			char shuffled[10][8]={"sbsra", "linvy", "htroo", "smade", "pleope", "celefed", "weltat", "dsaydr", "ctakde", "wdalde"};
 			char words[10][30][7]={
 				{"bar", "bra", "ass", "abs", "bass", "bars", "bras", "brass"},
 				{"ivy", "yin", "lin", "nil", "viny", "inly", "liny", "vinyl"},
@@ -178,7 +193,7 @@ int main(){
 				{"eat", "let", "lea", "law", "tea", "tat", "ale", "ate", "awe", "awl", "wet", "late", "teal", "teat", "tale", "welt", "weal", "watt", "wattle"},
 				{"say", "sad", "ads", "add", "yar", "ray", "dad", "day", "dry", "adds", "yard", "rays", "dads", "days", "dray", "yards", "drays", "dryad", "dryads"},
 				{"eat", "cad", "cat", "ade", "ace", "act", "ate", "ted", "tea", "tad", "deck", "date", "cake", "aced", "teak", "take", "tack", "cadet", "caked", "acted", "tacked"},
-				{"wad", "law", "dew", "wed", "awe", "add", "dad", "lad", "led", "ale", "lea", "lewd", "weld", "awed", "wade", "weal", "dead", "dale", "deal", "lade", "lead", "weald", "addle", "dawdle"}};
+				{"law", "dew", "wed", "awe", "add", "dad", "lad", "led", "ale", "lea", "lewd", "weld", "awed", "wade", "weal", "dead", "dale", "deal", "lade", "lead", "weald", "addle", "dawdle","waddle"}};
 			char blanks[10][30][15]={
 
 				{"___", "___", "___", "___", "____", "____", "____", "_____"},
@@ -186,11 +201,11 @@ int main(){
 				{"___", "___", "___", "___", "___", "___", "____", "____", "____", "____", "____", "_____"},
 				{"___", "___", "___", "___", "___", "___","____", "____", "____", "____", "____", "____", "____", "_____"},
 				{"___", "___", "___", "___", "___", "___", "___", "___", "___", "____", "____", "____", "____", "____", "____", "_____", "______"},
-				{"___", "___", "___", "___", "___", "___", "___", "____", "____", "____", "____", "____", "_____", "______"},
+				{"___", "___", "___", "___", "___", "___", "___", "____", "____", "____", "____", "____", "______", "_______"},
 				{"___", "___", "___", "___", "___", "___", "___", "___", "___", "___", "___", "____", "____", "____", "____", "____", "____", "____", "______"},
-				{"___", "___", "___", "___", "___", "___", "___", "___", "___", "____", "____", "____", "____", "____", "____", "______", "______", "______", "_______"},
+				{"___", "___", "___", "___", "___", "___", "___", "___", "___", "____", "____", "____", "____", "____", "____", "______", "______", "______", "______"},
 				{"___", "___", "___", "___", "___", "___", "___", "___", "___", "___", "____", "____", "____", "____", "____", "____", "____", "_____", "_____", "_____", "______"},
-				{"___", "___", "___", "___", "___", "___", "___", "___", "___", "___", "___", "____", "____", "____", "____", "____", "____", "____", "____", "____", "____", "_____", "_____", "_____", "______"}};
+				{"___", "___", "___", "___", "___", "___", "___", "___", "___", "___", "____", "____", "____", "____", "____", "____", "____", "____", "____", "____", "_____", "_____", "______", "______"}};
 
 			for(i=0; i<10; i++){
 				exitRound=playGame(words[i], blanks[i], shuffled[i], &points);
@@ -200,7 +215,7 @@ int main(){
 			}
 
 			if(i==10){
-				erase(0,0,640,480);
+				erase(0,0,FULL_ROW,FULL_COL);
 			}
 
 		}else if(menuChoice!='2'){
