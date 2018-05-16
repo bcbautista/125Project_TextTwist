@@ -138,7 +138,7 @@ int playGame(char words[30][7], char blanks[30][15], char shuffled[7], int *poin
 		write_text(pts,280,160,WHITE,3);
 		write_text("0 - Submit word",150,95,WHITE,0);
 		write_text("1 - Shuffle",150,110,WHITE,0);
-		write_text("2 - Exit",150,125,WHITE,0);
+		write_text("2 - Exit/Clear",150,125,WHITE,0);
 		if(guessedLongest == 1){
 			write_text("3 - Next Round",150,140,GREEN,0);
 		}
@@ -157,12 +157,28 @@ int playGame(char words[30][7], char blanks[30][15], char shuffled[7], int *poin
 			write_char(keypress,x,70,WHITE,3);
 			do{
 				i++;
+				if(i >= 7){
+					i = 7;
+					gameInput[i]=(char)getch();
+					if(gameInput[i] == '2'){
+						break;
+					}
+				}
+				else{
 				gameInput[i]=(char)getch();
 				x+=8;
 				if(gameInput[i]!='0'){
-					write_char(gameInput[i],x,70,WHITE,3);
+					if(gameInput[i] == '2'){
+						break;
+					}
+					else{
+						write_char(gameInput[i],x,70,WHITE,3);
+					}
+				}
 				}
 			}while(gameInput[i]!='0');
+			if(gameInput[i] == '2'){}
+			else{
 			gameInput[i]='\0';
 			guessed+=checkInput(words, blanks, gameInput, points);
 			if(strcmp(gameInput, words[toGuess-1]) == 0){
@@ -172,6 +188,7 @@ int playGame(char words[30][7], char blanks[30][15], char shuffled[7], int *poin
 				// 	break;
 				// }
 				guessedLongest = 1;
+			}
 			}
 			erase(0,0,320,200);
 		}
