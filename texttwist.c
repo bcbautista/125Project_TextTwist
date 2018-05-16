@@ -75,8 +75,8 @@ int len=0;
 	}
 	temp[len]='\0';
 	strcpy(shuffled, temp);
-	erase(200,30,120,50);
-	write_text(shuffled,200,50,WHITE,3);
+	erase(220,50,150,20);
+	write_text(shuffled,220,50,WHITE,0);
 }
 
 int checkInput(char round1Words[30][7], char round1Blank[30][15], char gameInput[7], int *points){
@@ -101,6 +101,10 @@ int checkInput(char round1Words[30][7], char round1Blank[30][15], char gameInput
 				}else{
 					*points+=30;
 				}
+				erase(270,160,300,25);
+				char pts[10];
+		   		sprintf(pts,"%d",*points);
+				write_text(pts,280,160,WHITE,3);
 				return 1;
 			}else{
 				printf("Word already found!\n");
@@ -128,11 +132,10 @@ int playGame(char words[30][7], char blanks[30][15], char shuffled[7], int *poin
 		write_text(shuffled,220,50,WHITE,0);
 		write_text("Entered: ",150,70,WHITE,0);
 		printBlank(blanks,10,30);
-		write_text("Points: ",180,160,WHITE,0);
-
-		//char pointArray[] = itoa(*points);
-		//write_text(pointArray,250,160,WHITE,1);
-		//write_text((*points),250,160,WHITE,0);
+		write_text("Points: ",210,160,WHITE,0);
+		char pts[10];
+   		sprintf(pts,"%d",*points);
+		write_text(pts,280,160,WHITE,3);
 		write_text("0 - Submit word",150,95,WHITE,0);
 		write_text("1 - Shuffle",150,110,WHITE,0);
 		write_text("2 - Exit",150,125,WHITE,0);
@@ -149,10 +152,16 @@ int playGame(char words[30][7], char blanks[30][15], char shuffled[7], int *poin
 			break;
 		}else{
 			int i=0;
+			int x=220;
 			gameInput[i]=keypress;
+			write_char(keypress,x,70,WHITE,3);
 			do{
 				i++;
 				gameInput[i]=(char)getch();
+				x+=8;
+				if(gameInput[i]!='0'){
+					write_char(gameInput[i],x,70,WHITE,3);
+				}
 			}while(gameInput[i]!='0');
 			gameInput[i]='\0';
 			guessed+=checkInput(words, blanks, gameInput, points);
