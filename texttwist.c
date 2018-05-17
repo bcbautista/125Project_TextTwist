@@ -165,16 +165,16 @@ int playGame(char words[30][7], char blanks[30][15], char shuffled[7], int *poin
 					}
 				}
 				else{
-				gameInput[i]=(char)getch();
-				x+=8;
-				if(gameInput[i]!='0'){
-					if(gameInput[i] == '2'){
-						break;
+					gameInput[i]=(char)getch();
+					x+=8;
+					if(gameInput[i]!='0'){
+						if(gameInput[i] == '2'){
+							break;
+						}
+						else{
+							write_char(gameInput[i],x,70,WHITE,3);
+						}
 					}
-					else{
-						write_char(gameInput[i],x,70,WHITE,3);
-					}
-				}
 				}
 			}while(gameInput[i]!='0');
 			if(gameInput[i] == '2'){}
